@@ -27,7 +27,7 @@
       선우나경만 파일명이 nagyung_standing.png / nagyung_portrait.png
       {sceneId}_{n}.png                     쇼트애니 컷 (루트: ndra_1.png, seohn_1~3 …)
       wiki.png                            세계관 최상단 이미지
-    미리보기 해시: #desk  ·  #world  ·  #lab  ·  #anim  ·  #scene=0  ·  #spin  ·  #char=haesol
+    미리보기 해시: #desk  ·  #world  ·  #assign  ·  #lab  ·  #anim  ·  #scene=0  ·  #spin  ·  #char=haesol
     ============================================================
   -->
   <link rel="preconnect" href="https://cdn.jsdelivr.net" />
@@ -431,13 +431,13 @@
     .pane.wiki { user-select: text; }
 
     .bookmarks {
-      position: absolute; right: -2px; top: 92px; z-index: 8;
-      display: flex; flex-direction: column; gap: 8px;
+      position: absolute; right: -2px; top: 48px; z-index: 8;
+      display: flex; flex-direction: column; gap: 6px;
     }
     .bookmarks button {
       writing-mode: vertical-rl;
-      padding: 14px 8px; border-radius: 10px 0 0 10px;
-      font-size: 11px; font-weight: 700; letter-spacing: .16em;
+      padding: 12px 7px; border-radius: 10px 0 0 10px;
+      font-size: 10px; font-weight: 700; letter-spacing: .16em;
       background: rgba(12, 22, 40, .72);
       border: 1px solid var(--line); border-right: 0;
       backdrop-filter: blur(12px);
@@ -486,6 +486,166 @@
       text-shadow: 0 0 18px rgba(255,122,61,.25);
     }
     .news-card .chev { opacity: .55; }
+
+    /* ===== assign quiz ===== */
+    #paneAssign {
+      padding: 8px 46px calc(28px + var(--safe-b)) 18px;
+    }
+    #assignView { min-height: 100%; }
+    .as-kicker {
+      font-family: "Outfit", sans-serif; font-size: 10px; font-weight: 600;
+      letter-spacing: .22em; text-transform: uppercase; color: var(--cyan);
+    }
+    .as-title {
+      margin: 6px 0 8px; font-size: 26px; font-weight: 800;
+      letter-spacing: -.03em; color: var(--orange);
+    }
+    .as-lead {
+      font-size: 13px; line-height: 1.55; color: var(--fg-2); margin-bottom: 18px;
+    }
+    .as-start, .as-retry {
+      width: 100%; height: 48px; border-radius: 16px;
+      font-weight: 800; letter-spacing: .08em;
+      background: linear-gradient(180deg, var(--blue-2), var(--blue));
+      box-shadow: 0 10px 24px rgba(59,130,246,.28);
+    }
+    .as-progress {
+      display: flex; align-items: center; gap: 10px; margin: 2px 0 14px;
+    }
+    .as-progress b {
+      flex: none; font-family: "Outfit", sans-serif;
+      font-size: 11px; letter-spacing: .14em; color: var(--cyan);
+    }
+    .as-bar {
+      flex: 1; height: 4px; border-radius: 99px;
+      background: rgba(255,255,255,.08); overflow: hidden;
+    }
+    .as-bar i {
+      display: block; height: 100%; width: 0;
+      background: linear-gradient(90deg, var(--orange), var(--blue-2));
+      border-radius: 99px; transition: width .35s var(--ease);
+    }
+    .as-q {
+      font-size: 18px; font-weight: 700; line-height: 1.45;
+      margin: 0 0 14px; color: var(--white);
+    }
+    .as-choices { display: flex; flex-direction: column; gap: 8px; }
+    .as-choices button {
+      text-align: left; padding: 14px 14px;
+      border-radius: 16px; line-height: 1.45; font-size: 14px;
+      background: linear-gradient(90deg, rgba(255,255,255,.08), rgba(255,255,255,.03));
+      border: 1px solid var(--line);
+    }
+    .as-choices button:active {
+      border-color: rgba(96,165,250,.7);
+      background: linear-gradient(90deg, rgba(59,130,246,.22), rgba(255,255,255,.04));
+    }
+    .as-tally { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
+    .as-row {
+      display: grid; grid-template-columns: 36px 1fr 28px; gap: 10px;
+      align-items: center; padding: 8px 10px; border-radius: 14px;
+      background: rgba(255,255,255,.04); border: 1px solid transparent;
+      opacity: .55; transform: scale(.98); transition: .45s var(--ease);
+    }
+    .as-row.on { opacity: 1; transform: none; border-color: color-mix(in srgb, var(--row) 55%, transparent); }
+    .as-row.lead {
+      background: color-mix(in srgb, var(--row) 18%, rgba(255,255,255,.04));
+      box-shadow: 0 0 18px color-mix(in srgb, var(--row) 28%, transparent);
+    }
+    .as-row.drop { opacity: 0; transform: translateY(8px) scale(.96); pointer-events: none; }
+    .as-row.win {
+      opacity: 1; transform: scale(1.02);
+      border-color: color-mix(in srgb, var(--row) 70%, #fff);
+    }
+    .as-row img {
+      width: 36px; height: 28px; object-fit: contain;
+      filter: drop-shadow(0 0 6px var(--row));
+    }
+    .as-row .nm { font-size: 12px; font-weight: 700; }
+    .as-row .meter {
+      height: 4px; border-radius: 99px; margin-top: 5px;
+      background: rgba(255,255,255,.08); overflow: hidden;
+    }
+    .as-row .meter i {
+      display: block; height: 100%; width: 0%;
+      background: var(--row); border-radius: 99px;
+    }
+    .as-row .sc {
+      font-family: "Outfit", sans-serif; font-size: 14px; font-weight: 700;
+      text-align: right; color: var(--cyan);
+    }
+    .as-result { padding-bottom: 12px; }
+    .as-logo {
+      width: min(72%, 240px); margin: 8px auto 12px;
+    }
+    .as-logo img {
+      width: 100%; height: auto;
+      filter:
+        drop-shadow(0 0 3px #fff)
+        drop-shadow(0 0 10px var(--org))
+        drop-shadow(0 0 28px var(--org));
+    }
+    .as-blurb {
+      font-size: 13px; line-height: 1.6; color: var(--fg-2);
+      margin: 0 0 18px;
+    }
+    .as-roster {
+      font-size: 10px; letter-spacing: .16em; color: var(--cyan);
+      font-family: "Outfit", sans-serif; text-transform: uppercase;
+      margin: 0 0 12px;
+    }
+    .badge-row {
+      --badge: 168px;
+      display: flex; flex-wrap: wrap; justify-content: center;
+      gap: 12px; padding: 6px 0 18px;
+    }
+    .badge-row[data-n="1"] { --badge: 168px; }
+    .badge-row[data-n="2"] { --badge: 138px; gap: 10px; }
+    .badge-row[data-n="3"] { --badge: 108px; gap: 8px; }
+    .badge-row[data-n="4"] { --badge: 96px; gap: 8px; }
+    .badge-card {
+      width: var(--badge); position: relative;
+      border-radius: 14px; overflow: hidden; padding: 0; text-align: left;
+      background: linear-gradient(180deg, rgba(247,251,255,.14), rgba(247,251,255,.04));
+      border: 1px solid var(--line);
+      box-shadow:
+        0 16px 28px rgba(0,0,0,.38),
+        0 0 0 1px rgba(255,255,255,.06);
+      animation: badgeFloat 3.4s ease-in-out infinite;
+      animation-delay: calc(var(--i, 0) * .38s);
+    }
+    .badge-card::before {
+      content: ""; position: absolute; top: 7px; left: 50%;
+      width: 8px; height: 8px; margin-left: -4px; z-index: 2;
+      border-radius: 50%; background: #070b14;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.28), 0 0 0 2px rgba(12,18,32,.35);
+    }
+    .badge-card .shot {
+      width: 100%; aspect-ratio: 3 / 4; object-fit: cover; object-position: center 14%;
+      background: #101624;
+    }
+    .badge-foot {
+      display: grid; grid-template-columns: 1fr auto; gap: 4px 6px;
+      align-items: center; padding: 8px 8px 10px;
+      background: linear-gradient(180deg, rgba(7,11,20,.2), rgba(7,11,20,.55));
+    }
+    .badge-foot strong {
+      font-size: calc(var(--badge) * .092); font-weight: 800;
+      letter-spacing: -.02em; line-height: 1.2;
+    }
+    .badge-foot .rk {
+      grid-column: 1; font-family: "Outfit", sans-serif;
+      font-size: 9px; letter-spacing: .12em; color: var(--cyan); text-transform: uppercase;
+    }
+    .badge-foot .emb {
+      grid-column: 2; grid-row: 1 / span 2;
+      width: calc(var(--badge) * .22); height: auto; object-fit: contain;
+      filter: drop-shadow(0 0 1px #fff) drop-shadow(0 0 8px rgba(180,220,255,.75));
+    }
+    @keyframes badgeFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-7px); }
+    }
 
     /* detail */
     #detail {
@@ -894,9 +1054,13 @@
           <div class="bookmarks">
             <button type="button" class="on" data-tab="chars" id="tabChars"></button>
             <button type="button" data-tab="world" id="tabWorld"></button>
+            <button type="button" data-tab="assign" id="tabAssign"></button>
           </div>
           <div class="pane show" id="paneChars"></div>
           <div class="pane wiki" id="paneWorld"></div>
+          <div class="pane assign" id="paneAssign">
+            <div id="assignView"></div>
+          </div>
           <div id="detail">
             <div class="d-info" id="dInfo"></div>
             <div class="d-stand" id="dStand"><div class="glow"></div></div>
@@ -966,6 +1130,7 @@
       "ticker": "곽해솔 궤도 시연 중계 1위  ·  류단 팀장 훈련 조기종료  ·  황보소라 성씨 정정 3회  ·  성다해 A급 소감 3초 침묵  ·  정미로 출구 농담 퇴장 조치  ·  강민원 안전선 안내  ·  차여름 구두합의 질의  ·  박복 세금 납부 인증  ·  선우나경 생존율 46%",
       "tabChars": "인물",
       "tabWorld": "세계",
+      "tabAssign": "배정",
       "labBtn": "체험",
       "labTitle": "",
       "lblEmblem": "",
@@ -1002,42 +1167,48 @@
         "name": "국가재난대응청",
         "logo": "ndra_logo.png",
         "color": "#3b6bd4",
-        "burn": "#f5c542"
+        "burn": "#f5c542",
+        "blurb": "행정안전부 산하 외청. 게이트를 영웅 사건이 아니라 상시 재난으로 본다. 통제선, 보고, 당직, 연금. 유명세보다 현장이 앞선다."
       },
       "seohn": {
         "id": "seohn",
         "name": "세온헌터스",
         "logo": "seohn_logo.png",
         "color": "#b9a4ff",
-        "burn": "#e0d0ff"
+        "burn": "#e0d0ff",
+        "blurb": "국내 최상위 민간 길드. 대기업과 프로구단과 기획사의 중간. 전력과 미디어 가치를 같이 본다. 결재와 회의가 많다."
       },
       "taerim": {
         "id": "taerim",
         "name": "태림길드",
         "logo": "taerim_logo.png",
         "color": "#2f7a3e",
-        "burn": "#8fd19a"
+        "burn": "#8fd19a",
+        "blurb": "중견 현장 전문 길드. 셀럽보다 철수 판단. 업계 평은 ‘노잼인데 안 죽는 회사’. 부상 은폐는 징계다."
       },
       "hankyul": {
         "id": "hankyul",
         "name": "한결손해보험",
         "logo": "hankyul_logo.png",
         "color": "#00a9e0",
-        "burn": "#7fe0ff"
+        "burn": "#7fe0ff",
+        "blurb": "게이트가 산업이 된 자리에 붙은 손해보험사. 본업은 보험이다. 구두 합의보다 특약이다."
       },
       "hawon": {
         "id": "hawon",
         "name": "해스티원더러즈",
         "logo": "hawon_logo.png",
         "color": "#ff6a00",
-        "burn": "#ffb020"
+        "burn": "#ffb020",
+        "blurb": "Hasty Wonderers. 통칭 해원. 기간·건별 계약이 많다. 기본급은 낮고 성과급과 위험수당이 높다. 본사는 회의를 좋아하고 현장은 좌표를 좋아한다."
       },
       "independent": {
         "id": "independent",
         "name": "무소속",
         "logo": "independent_logo.png",
         "color": "#3a7a86",
-        "burn": "#7fd0d8"
+        "burn": "#7fd0d8",
+        "blurb": "길드 로스터 밖. 면허, 세금, 장비, 보험을 본인이 진다. 건별로 받고, 무면허 파티는 안 탄다."
       }
     },
     "ranks": {
@@ -1683,6 +1854,130 @@
         }
       ]
     },
+    "assign": {
+      "kicker": "ASSIGN",
+      "title": "소속 배정",
+      "lead": "14문항. 각 3지선다. 점수가 가장 높은 조직으로 간다. 무소속도 목록에 있다.",
+      "start": "시작",
+      "retry": "다시 배정",
+      "tally": "집계",
+      "result": "배정 결과",
+      "roster": "공개 인물",
+      "questions": [
+        {
+          "q": "아이돌이 된다면 어떨 것 같아?",
+          "a": [
+            { "t": "카메라 앞에서 하는 일이면 적성이다.", "org": "seohn" },
+            { "t": "방송보다 현장이 편하다. 안무는 사양한다.", "org": "taerim" },
+            { "t": "출연료와 초상권만 맞으면 된다.", "org": "hawon" }
+          ]
+        },
+        {
+          "q": "무언가를 위해 노력할 때의 스타일은?",
+          "a": [
+            { "t": "루틴을 만들고 기록으로 남긴다.", "org": "ndra" },
+            { "t": "필요한 구간만 몰아서 끝낸다.", "org": "independent" },
+            { "t": "티가 나는 성과에 힘을 쏟는다.", "org": "seohn" }
+          ]
+        },
+        {
+          "q": "하루의 계획은 어떻게 짜는 스타일?",
+          "a": [
+            { "t": "시간표가 있어야 숨이 나온다.", "org": "ndra" },
+            { "t": "큰 줄만 잡고 현장에서 고친다.", "org": "taerim" },
+            { "t": "마감·청구·특약이 달력이다.", "org": "hankyul" }
+          ]
+        },
+        {
+          "q": "갑자기 책임이 커지면?",
+          "a": [
+            { "t": "사람부터 물린다. 산 사람이 우선이다.", "org": "taerim" },
+            { "t": "매뉴얼과 보고 라인부터 찾는다.", "org": "ndra" },
+            { "t": "조건부터 다시 쓴다. 구두로는 안 한다.", "org": "hankyul" }
+          ]
+        },
+        {
+          "q": "여럿이 모인 자리에서는?",
+          "a": [
+            { "t": "말리는 쪽이 된다. 보이는 자리가 편하다.", "org": "seohn" },
+            { "t": "필요한 말만 하고 빠진다.", "org": "hawon" },
+            { "t": "출구부터 본다.", "org": "independent" }
+          ]
+        },
+        {
+          "q": "자랑할 일이 생기면?",
+          "a": [
+            { "t": "공개하는 편이 맞다. 보이는 게 값이다.", "org": "seohn" },
+            { "t": "보고 라인에 먼저 올린다.", "org": "ndra" },
+            { "t": "단가에 반영되면 그때 말한다.", "org": "hawon" }
+          ]
+        },
+        {
+          "q": "돈을 대하는 태도는?",
+          "a": [
+            { "t": "증빙과 특약이 있어야 마음이 놓인다.", "org": "hankyul" },
+            { "t": "매달 들어오는 돈이 맞아야 한다.", "org": "ndra" },
+            { "t": "들어온 돈에서 세금을 먼저 뺀다.", "org": "independent" }
+          ]
+        },
+        {
+          "q": "일이 꼬이면 먼저 하는 것은?",
+          "a": [
+            { "t": "상태를 공유한다. 숨기는 쪽이 더 위험하다.", "org": "taerim" },
+            { "t": "합의 내용을 문서로 고정한다.", "org": "hankyul" },
+            { "t": "공개 채널을 닫고 입장을 정리한다.", "org": "seohn" }
+          ]
+        },
+        {
+          "q": "쉬는 날에 연락이 오면?",
+          "a": [
+            { "t": "내 차례면 나간다.", "org": "ndra" },
+            { "t": "받을 돈이 있으면 받는다.", "org": "independent" },
+            { "t": "조건이 세지면 나간다.", "org": "hawon" }
+          ]
+        },
+        {
+          "q": "도구를 고를 때?",
+          "a": [
+            { "t": "익숙한 지급분이면 충분하다.", "org": "taerim" },
+            { "t": "싸도 된다. 정비만 되면.", "org": "independent" },
+            { "t": "돋보이는 쪽이 나중에 이득이다.", "org": "hawon" }
+          ]
+        },
+        {
+          "q": "듣고 싶은 평은?",
+          "a": [
+            { "t": "안 죽는 쪽.", "org": "taerim" },
+            { "t": "잘 팔리는 쪽.", "org": "seohn" },
+            { "t": "정산이 깨끗한 쪽.", "org": "hankyul" }
+          ]
+        },
+        {
+          "q": "낯선 문제가 생기면?",
+          "a": [
+            { "t": "남는 게 적어도, 맡는 일이면 맡는다.", "org": "ndra" },
+            { "t": "이득과 위험을 저울질한다.", "org": "hawon" },
+            { "t": "작은 일부터 건별로 받는다. 모르는 파티는 안 탄다.", "org": "independent" }
+          ]
+        },
+        {
+          "q": "같이 일할 사람 기준은?",
+          "a": [
+            { "t": "말보다 습관이 맞는 사람.", "org": "taerim" },
+            { "t": "내 구간을 건드리지 않는 사람.", "org": "hawon" },
+            { "t": "역할이 적혀 있는 사람.", "org": "hankyul" }
+          ]
+        },
+        {
+          "q": "몇 년 뒤의 나는?",
+          "a": [
+            { "t": "얼굴이거나, 숫자를 쥐고 있다.", "org": "seohn" },
+            { "t": "사고와 비용을 먼저 읽는 사람이다.", "org": "hankyul" },
+            { "t": "소속 없이 면허와 거래처만 남아 있다.", "org": "independent" }
+          ]
+        }
+      ]
+    },
     "namecard": {
       "base": "khw_namecard_base.png",
       "width": 1562,
@@ -1793,6 +2088,8 @@
       const state = {
         screen: "boot",
         tab: "chars",
+        quiz: null,
+        quizRaf: 0,
         raf: 0,
         lastLine: -1,
         lastScene: -1,
@@ -1994,6 +2291,7 @@
         $("#ticker").textContent = u.ticker || "";
         $("#tabChars").textContent = u.tabChars || "";
         $("#tabWorld").textContent = u.tabWorld || "";
+        $("#tabAssign").textContent = u.tabAssign || "";
         $("#toLab").textContent = u.labBtn || "";
         $("#lab h2").textContent = u.labTitle || "";
         $("#lblEmblem").textContent = u.lblEmblem || "";
@@ -2130,13 +2428,206 @@
         $("#detail").classList.add("on");
       }
 
+      function quizData() {
+        return DATA.assign || {};
+      }
+
+      function resetQuiz() {
+        if (state.quizRaf) {
+          cancelAnimationFrame(state.quizRaf);
+          state.quizRaf = 0;
+        }
+        state.quiz = { phase: "start", i: 0, picks: [], scores: null, winner: null };
+      }
+
+      function orgScoreboard() {
+        const scores = {};
+        Object.keys(DATA.orgs).forEach((id) => { scores[id] = 0; });
+        (state.quiz.picks || []).forEach((id) => {
+          if (id in scores) scores[id] += 1;
+        });
+        return scores;
+      }
+
+      function pickWinner(scores, picks) {
+        let best = 0;
+        Object.values(scores).forEach((n) => { if (n > best) best = n; });
+        const tied = Object.keys(scores).filter((id) => scores[id] === best);
+        if (tied.length === 1) return tied[0];
+        for (let i = (picks || []).length - 1; i >= 0; i--) {
+          if (tied.includes(picks[i])) return picks[i];
+        }
+        return tied[0] || "independent";
+      }
+
+      function rankLabel(rk) {
+        return rk === "N" ? "비각성" : rk;
+      }
+
+      function renderAssign() {
+        const box = $("#assignView");
+        if (!box) return;
+        if (!state.quiz) resetQuiz();
+        const A = quizData();
+        const qs = A.questions || [];
+        const qz = state.quiz;
+
+        if (qz.phase === "q" && qz.i >= qs.length) {
+          qz.scores = orgScoreboard();
+          qz.winner = pickWinner(qz.scores, qz.picks);
+          qz.phase = "tally";
+        }
+
+        if (qz.phase === "start") {
+          box.innerHTML = `
+            <div class="as-kicker">${esc(A.kicker || "ASSIGN")}</div>
+            <h2 class="as-title">${esc(A.title || "")}</h2>
+            <p class="as-lead">${esc(A.lead || "")}</p>
+            <button type="button" class="as-start" id="asStart">${esc(A.start || "시작")}</button>`;
+          $("#asStart").onclick = () => {
+            state.quiz = { phase: "q", i: 0, picks: [], scores: null, winner: null };
+            renderAssign();
+          };
+          return;
+        }
+
+        if (qz.phase === "q") {
+          const item = qs[qz.i];
+          const pct = ((qz.i) / Math.max(1, qs.length)) * 100;
+          const num = String(qz.i + 1).padStart(2, "0");
+          const tot = String(qs.length).padStart(2, "0");
+          box.innerHTML = `
+            <div class="as-progress"><b>${num} / ${tot}</b><div class="as-bar"><i style="width:${pct}%"></i></div></div>
+            <p class="as-q">${esc(item.q)}</p>
+            <div class="as-choices">${item.a.map((c, n) =>
+              `<button type="button" data-org="${esc(c.org)}" data-n="${n}">${esc(c.t)}</button>`
+            ).join("")}</div>`;
+          requestAnimationFrame(() => {
+            const bar = box.querySelector(".as-bar i");
+            if (bar) bar.style.width = `${((qz.i + 1) / qs.length) * 100}%`;
+          });
+          box.querySelectorAll(".as-choices button").forEach((btn) => {
+            btn.onclick = () => {
+              qz.picks.push(btn.dataset.org);
+              qz.i += 1;
+              renderAssign();
+            };
+          });
+          return;
+        }
+
+        if (qz.phase === "tally") {
+          const ids = Object.keys(DATA.orgs);
+          box.innerHTML = `
+            <div class="as-kicker">${esc(A.kicker || "ASSIGN")}</div>
+            <h2 class="as-title">${esc(A.tally || "")}</h2>
+            <div class="as-tally" id="asTally">${ids.map((id) => {
+              const o = DATA.orgs[id];
+              return `<div class="as-row" data-org="${id}" style="--row:${o.color}">
+                <img src="${o.logo}" alt="" />
+                <div>
+                  <div class="nm">${esc(o.name)}</div>
+                  <div class="meter"><i></i></div>
+                </div>
+                <div class="sc">0</div>
+              </div>`;
+            }).join("")}</div>`;
+          runTally();
+          return;
+        }
+
+        const win = orgOf(qz.winner);
+        const members = DATA.characters.filter((c) => c.org === qz.winner);
+        const n = Math.max(1, members.length);
+        document.documentElement.style.setProperty("--org", win.color);
+        box.innerHTML = `
+          <div class="as-result">
+            <div class="as-kicker">${esc(A.result || "")}</div>
+            <h2 class="as-title">${esc(win.name)}</h2>
+            <div class="as-logo"><img src="${win.logo}" alt="" /></div>
+            <p class="as-blurb">${esc(win.blurb || "")}</p>
+            <div class="as-roster">${esc(A.roster || "")}</div>
+            <div class="badge-row" data-n="${n}">${members.map((ch, i) => `
+              <button type="button" class="badge-card" data-id="${esc(ch.id)}" style="--i:${i}">
+                <img class="shot" src="${ch.portrait}" alt="" />
+                <div class="badge-foot">
+                  <strong>${esc(ch.name)}</strong>
+                  <span class="rk">${esc(rankLabel(ch.rank))}</span>
+                  <img class="emb" src="${DATA.ranks[ch.rank]}" alt="" />
+                </div>
+              </button>`).join("")}</div>
+            <button type="button" class="as-retry" id="asRetry">${esc(A.retry || "")}</button>
+          </div>`;
+        box.querySelectorAll(".badge-card").forEach((btn) => {
+          btn.onclick = () => openDetail(btn.dataset.id);
+        });
+        $("#asRetry").onclick = () => { resetQuiz(); renderAssign(); };
+      }
+
+      function runTally() {
+        const qz = state.quiz;
+        const scores = qz.scores || orgScoreboard();
+        const ids = Object.keys(DATA.orgs);
+        const max = Math.max(1, ...ids.map((id) => scores[id]));
+        const tally = $("#asTally");
+        if (!tally) return;
+        if (state.quizRaf) cancelAnimationFrame(state.quizRaf);
+        const t0 = performance.now();
+        const dur = 1500;
+        const tick = (now) => {
+          const p = Math.min(1, (now - t0) / dur);
+          const e = 1 - Math.pow(1 - p, 3);
+          let leadId = ids[0];
+          let leadN = -1;
+          ids.forEach((id) => {
+            const n = Math.round(scores[id] * e);
+            const row = tally.querySelector(`[data-org="${id}"]`);
+            if (!row) return;
+            row.classList.add("on");
+            row.classList.toggle("lead", n > 0 && n >= leadN);
+            row.querySelector(".sc").textContent = String(n);
+            row.querySelector(".meter i").style.width = `${(n / max) * 100}%`;
+            if (n > leadN) { leadN = n; leadId = id; }
+          });
+          ids.forEach((id) => {
+            const row = tally.querySelector(`[data-org="${id}"]`);
+            if (row) row.classList.toggle("lead", id === leadId && leadN > 0);
+          });
+          if (p < 1) {
+            state.quizRaf = requestAnimationFrame(tick);
+          } else {
+            state.quizRaf = 0;
+            ids.forEach((id) => {
+              const row = tally.querySelector(`[data-org="${id}"]`);
+              if (!row) return;
+              row.classList.toggle("win", id === qz.winner);
+              row.classList.toggle("drop", id !== qz.winner);
+              row.classList.toggle("lead", id === qz.winner);
+            });
+            setTimeout(() => {
+              if (state.tab !== "assign" || state.quiz.phase !== "tally") return;
+              state.quiz.phase = "result";
+              renderAssign();
+            }, 720);
+          }
+        };
+        state.quizRaf = requestAnimationFrame(tick);
+      }
+
       function setTab(tab) {
         state.tab = tab;
         $("#paneChars").classList.toggle("show", tab === "chars");
         $("#paneWorld").classList.toggle("show", tab === "world");
+        $("#paneAssign").classList.toggle("show", tab === "assign");
         $("#tabChars").classList.toggle("on", tab === "chars");
         $("#tabWorld").classList.toggle("on", tab === "world");
+        $("#tabAssign").classList.toggle("on", tab === "assign");
         $("#detail").classList.remove("on");
+        if (tab !== "assign" && state.quizRaf) {
+          cancelAnimationFrame(state.quizRaf);
+          state.quizRaf = 0;
+        }
+        if (tab === "assign") renderAssign();
       }
 
       function makeBurn(color) {
@@ -2546,6 +3037,7 @@
         $("#btnCont").onclick = resumeAnim;
         $("#tabChars").onclick = () => setTab("chars");
         $("#tabWorld").onclick = () => setTab("world");
+        $("#tabAssign").onclick = () => setTab("assign");
         $("#toLab").onclick = () => { show("lab"); paintCard(); };
         $("#labBack").onclick = () => show("desk");
         $("#photoHit").onclick = () => $("#photoFile").click();
@@ -2575,9 +3067,10 @@
         };
 
         const hash = (location.hash || "").replace("#", "");
-        if (hash === "desk" || hash === "lab" || hash === "anim" || hash === "spin" || hash === "world") {
-          show(hash === "world" ? "desk" : hash);
+        if (hash === "desk" || hash === "lab" || hash === "anim" || hash === "spin" || hash === "world" || hash === "assign") {
+          show(hash === "world" || hash === "assign" ? "desk" : hash);
           if (hash === "world") setTab("world");
+          if (hash === "assign") setTab("assign");
           if (hash === "anim") {
             state.t0 = performance.now() - T.bgmLeadMs;
             state.raf = requestAnimationFrame(tick);
