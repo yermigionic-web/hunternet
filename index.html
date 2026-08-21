@@ -298,22 +298,19 @@
       transform: translate(-50%, -140%) scale(1.2);
       width: min(68%, 260px); z-index: 5; pointer-events: none;
       opacity: 0;
-      padding: 8px 12px;
-      border-radius: 16px;
-      background: linear-gradient(180deg, rgba(248,252,255,.96), rgba(228,238,255,.94));
-      border: 1.5px solid rgba(255,255,255,.95);
-      box-shadow:
-        0 0 0 2px color-mix(in srgb, var(--org) 55%, white),
-        0 10px 28px rgba(0,0,0,.45),
-        0 0 28px color-mix(in srgb, var(--org) 70%, transparent),
-        0 0 48px rgba(255,255,255,.22);
+      background: none; border: 0; padding: 0; box-shadow: none;
     }
     .org-drop.slam {
       animation: slam 0.55s cubic-bezier(.2,1.4,.3,1) forwards;
     }
     .org-drop img {
       width: 100%; height: auto;
-      filter: drop-shadow(0 0 8px rgba(255,255,255,.45));
+      filter:
+        drop-shadow(0 0 2px #fff)
+        drop-shadow(0 0 8px var(--org))
+        drop-shadow(0 0 18px var(--org))
+        drop-shadow(0 0 36px var(--org))
+        drop-shadow(0 0 58px color-mix(in srgb, var(--org) 85%, #fff));
     }
     .shock {
       position: absolute; left: 50%; bottom: 14%;
@@ -1689,7 +1686,7 @@
       "h": {
         "x": 0.175,
         "y": 0.36,
-        "size": 28
+        "size": 34
       },
       "ink": "#2a3b58",
       "photo": {
@@ -1713,12 +1710,12 @@
       "name": {
         "x": 0.175,
         "y": 0.248,
-        "size": 58
+        "size": 70
       },
       "age": {
         "x": 0.175,
         "y": 0.312,
-        "size": 28
+        "size": 34
       }
     }
   }
@@ -2343,32 +2340,6 @@
         return assets[src];
       }
 
-      function roundRect(ctx, x, y, w, h, r) {
-        const rr = Math.min(r, w / 2, h / 2);
-        ctx.beginPath();
-        ctx.moveTo(x + rr, y);
-        ctx.arcTo(x + w, y, x + w, y + h, rr);
-        ctx.arcTo(x + w, y + h, x, y + h, rr);
-        ctx.arcTo(x, y + h, x, y, rr);
-        ctx.arcTo(x, y, x + w, y, rr);
-        ctx.closePath();
-      }
-
-      function drawPlate(ctx, x, y, w, h) {
-        const padX = w * 0.08, padY = h * 0.1;
-        ctx.save();
-        ctx.shadowColor = "rgba(160, 200, 255, 0.7)";
-        ctx.shadowBlur = 22;
-        ctx.fillStyle = "rgba(245, 249, 255, 0.94)";
-        roundRect(ctx, x - padX, y - padY, w + padX * 2, h + padY * 2, 14);
-        ctx.fill();
-        ctx.shadowBlur = 0;
-        ctx.strokeStyle = "rgba(42, 59, 88, 0.55)";
-        ctx.lineWidth = 2.5;
-        ctx.stroke();
-        ctx.restore();
-      }
-
       async function paintCard() {
         const nc = DATA.namecard;
         const W = nc.width;
@@ -2396,7 +2367,6 @@
         if (em) {
           const e = nc.emblem;
           const ex = e.x * W, ey = e.y * H, ew = e.w * W, eh = e.h * H;
-          drawPlate(ctx, ex, ey, ew, eh);
           ctx.drawImage(em, ex, ey, ew, eh);
         }
         const lg = await loadImg(orgOf(state.org).logo);
@@ -2407,7 +2377,6 @@
           let dw = boxW, dh = dw / r;
           if (dh > boxH) { dh = boxH; dw = dh * r; }
           const lx = l.x * W, ly = l.y * H + (boxH - dh) / 2;
-          drawPlate(ctx, lx, ly, dw, dh);
           ctx.drawImage(lg, lx, ly, dw, dh);
         }
         await document.fonts.ready;
