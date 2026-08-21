@@ -22,8 +22,9 @@
       khw_namecard_base.png           네임카드 프레임
 
       아직 없는 파일 — 주석 경로 그대로 두면 SVG 플레이스홀더가 뜹니다.
-      assets/characters/{id}_standing.png   캐릭터 스탠딩 (전신)
-      assets/characters/{id}_portrait.png   증명/흉상
+      {id}_standing.png                   캐릭터 스탠딩 (전신, 루트)
+      {id}_portrait.png                   증명사진 (루트)
+      선우나경만 파일명이 nagyung_standing.png / nagyung_portrait.png
       {sceneId}_{n}.png                     쇼트애니 컷 (루트: ndra_1.png, seohn_1~3 …)
       assets/wiki/cover.png                 세계관 최상단 이미지
     미리보기 해시: #desk  ·  #world  ·  #lab  ·  #anim  ·  #scene=0  ·  #spin  ·  #char=haesol
@@ -438,16 +439,26 @@
     }
 
     .news-card {
-      display: grid; grid-template-columns: 54px 1fr 18px;
+      display: grid; grid-template-columns: 76px 1fr 18px;
       gap: 10px; align-items: center;
-      padding: 12px 12px 12px 10px; margin-bottom: 8px;
+      padding: 10px 12px 10px 10px; margin-bottom: 8px;
       border-radius: 16px;
       background: linear-gradient(90deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
       border: 1px solid var(--line);
     }
+    .news-card .mug {
+      position: relative; width: 76px; height: 76px;
+      border-radius: 14px; overflow: hidden;
+      background: #101624;
+      box-shadow: 0 0 0 1px rgba(255,255,255,.22);
+    }
+    .news-card .mug .port {
+      width: 100%; height: 100%; object-fit: cover; object-position: center 16%;
+    }
     .news-card .emb {
-      width: 54px; height: 46px; object-fit: contain;
-      filter: drop-shadow(0 0 1px #fff) drop-shadow(0 0 10px rgba(180,220,255,.7));
+      position: absolute; right: 2px; bottom: 2px;
+      width: 28px; height: 24px; object-fit: contain;
+      filter: drop-shadow(0 0 1px #fff) drop-shadow(0 0 8px rgba(180,220,255,.8));
     }
     .news-card .kicker {
       font-size: 10px; letter-spacing: .14em; color: var(--cyan);
@@ -483,8 +494,12 @@
       display: inline-flex; align-items: center; gap: 4px;
       font-size: 12px; color: var(--cyan); margin-bottom: 14px;
     }
-    .d-info .rank-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
-    .d-info .rank-row img {
+    .d-info .rank-row { display: flex; align-items: flex-end; gap: 8px; margin-bottom: 8px; }
+    .d-info .idshot {
+      width: 52px; height: 68px; object-fit: cover; object-position: center 14%;
+      border-radius: 8px; border: 1px solid var(--line);
+    }
+    .d-info .rank-row img.emb {
       width: 42px; height: 36px; object-fit: contain;
       filter: drop-shadow(0 0 1px #fff) drop-shadow(0 0 10px rgba(180,220,255,.7));
     }
@@ -522,8 +537,8 @@
       filter: blur(10px);
     }
     .d-stand .art, .d-stand svg.figure {
-      position: relative; height: 92%; max-width: 110%;
-      object-fit: contain; object-position: bottom;
+      position: relative; height: 96%; max-width: 120%;
+      object-fit: contain; object-position: bottom center;
       filter: drop-shadow(0 10px 20px rgba(0,0,0,.45));
     }
 
@@ -875,8 +890,8 @@
     2) "introLines" 배열 길이/문구  (현재 비움. 4줄)
     3) "scenes" 배열 순서·멤버·로고
     4) 캐릭터 본문: characters[].newsTitle / summary / speech / quotes
-       스탠딩: assets/characters/{id}_standing.png
-       증명:   assets/characters/{id}_portrait.png
+       스탠딩: {id}_standing.png (선우나경은 nagyung_standing.png)
+       증명:   {id}_portrait.png (선우나경은 nagyung_portrait.png)
        애니컷: {sceneId}_1.png (루트)
     노래에 맞춰 currentTime 기준으로 재생되므로, 오디오를 바꿔도 timing만 맞추면 됩니다.
   -->
@@ -948,8 +963,8 @@
         "summary": "",
         "speech": "",
         "quotes": ["", "", ""],
-        "standing": "assets/characters/haesol_standing.png",
-        "portrait": "assets/characters/haesol_portrait.png",
+        "standing": "haesol_standing.png",
+        "portrait": "haesol_portrait.png",
         "hair": "#4a2c18",
         "eye": "#8a6a3a",
         "skin": "#e8c2a4",
@@ -967,8 +982,8 @@
         "summary": "",
         "speech": "",
         "quotes": ["", "", ""],
-        "standing": "assets/characters/dan_standing.png",
-        "portrait": "assets/characters/dan_portrait.png",
+        "standing": "dan_standing.png",
+        "portrait": "dan_portrait.png",
         "hair": "#161616",
         "eye": "#1a1a1a",
         "skin": "#c9956e",
@@ -986,8 +1001,8 @@
         "summary": "",
         "speech": "",
         "quotes": ["", "", ""],
-        "standing": "assets/characters/sora_standing.png",
-        "portrait": "assets/characters/sora_portrait.png",
+        "standing": "sora_standing.png",
+        "portrait": "sora_portrait.png",
         "hair": "#2a2a28",
         "eye": "#3d6b3a",
         "skin": "#e3b89a",
@@ -1006,8 +1021,8 @@
         "summary": "",
         "speech": "",
         "quotes": ["", "", ""],
-        "standing": "assets/characters/dahae_standing.png",
-        "portrait": "assets/characters/dahae_portrait.png",
+        "standing": "dahae_standing.png",
+        "portrait": "dahae_portrait.png",
         "hair": "#f3a0c0",
         "eye": "#6a6a72",
         "skin": "#f0cbb8",
@@ -1025,8 +1040,8 @@
         "summary": "",
         "speech": "",
         "quotes": ["", "", ""],
-        "standing": "assets/characters/miro_standing.png",
-        "portrait": "assets/characters/miro_portrait.png",
+        "standing": "miro_standing.png",
+        "portrait": "miro_portrait.png",
         "hair": "#9ec4d6",
         "eye": "#4a5a68",
         "skin": "#ecd2c0",
@@ -1045,8 +1060,8 @@
         "summary": "",
         "speech": "",
         "quotes": ["", "", ""],
-        "standing": "assets/characters/minwon_standing.png",
-        "portrait": "assets/characters/minwon_portrait.png",
+        "standing": "minwon_standing.png",
+        "portrait": "minwon_portrait.png",
         "hair": "#1c1c1c",
         "eye": "#b4232c",
         "skin": "#e2b496",
@@ -1065,8 +1080,8 @@
         "summary": "",
         "speech": "",
         "quotes": ["", "", ""],
-        "standing": "assets/characters/yeoreum_standing.png",
-        "portrait": "assets/characters/yeoreum_portrait.png",
+        "standing": "yeoreum_standing.png",
+        "portrait": "yeoreum_portrait.png",
         "hair": "#4b4f55",
         "eye": "#6d7278",
         "skin": "#e6c2aa",
@@ -1086,8 +1101,8 @@
         "summary": "",
         "speech": "",
         "quotes": ["", "", ""],
-        "standing": "assets/characters/bok_standing.png",
-        "portrait": "assets/characters/bok_portrait.png",
+        "standing": "bok_standing.png",
+        "portrait": "bok_portrait.png",
         "hair": "#e07a3a",
         "eye": "#6b7a3a",
         "skin": "#e8c09a",
@@ -1105,8 +1120,8 @@
         "summary": "",
         "speech": "",
         "quotes": ["", "", ""],
-        "standing": "assets/characters/nagyeong_standing.png",
-        "portrait": "assets/characters/nagyeong_portrait.png",
+        "standing": "nagyung_standing.png",
+        "portrait": "nagyung_portrait.png",
         "hair": "#d9d0c0",
         "eye": "#111111",
         "skin": "#edd4c2",
@@ -1323,11 +1338,17 @@
       function standingNode(ch) {
         const wrap = document.createElement("div");
         wrap.innerHTML = figureSVG(ch);
-        const img = new Image();
-        img.className = "art";
-        img.alt = "";
-        img.src = ch.standing;
-        img.onload = () => { wrap.innerHTML = ""; wrap.appendChild(img); };
+        const paths = [ch.standing, ch.id === "nagyeong" ? "nagyung_standing.png" : `${ch.id}_standing.png`].filter((p, i, a) => p && a.indexOf(p) === i);
+        const tryLoad = (i) => {
+          if (i >= paths.length) return;
+          const img = new Image();
+          img.className = "art";
+          img.alt = "";
+          img.onload = () => { wrap.innerHTML = ""; wrap.appendChild(img); };
+          img.onerror = () => tryLoad(i + 1);
+          img.src = paths[i];
+        };
+        tryLoad(0);
         return wrap;
       }
 
@@ -1384,7 +1405,10 @@
           card.type = "button";
           card.className = "news-card";
           card.innerHTML = `
-            <img class="emb" src="${DATA.ranks[ch.rank]}" alt="" />
+            <div class="mug">
+              <img class="port" src="${ch.portrait}" alt="" />
+              <img class="emb" src="${DATA.ranks[ch.rank]}" alt="" />
+            </div>
             <div>
               <div class="kicker">${ch.rank === "N" ? "" : ch.rank}</div>
               <h3>${ch.newsTitle ? ch.newsTitle.replace(ch.name, `<strong>${ch.name}</strong>`) : `<strong>${ch.name}</strong>`}</h3>
@@ -1427,7 +1451,10 @@
         $("#detail").style.setProperty("--org", o.color);
         $("#dInfo").innerHTML = `
           <button type="button" class="back" id="dBack">‹</button>
-          <div class="rank-row"><img src="${DATA.ranks[ch.rank]}" alt="" /></div>
+          <div class="rank-row">
+            <img class="idshot" src="${ch.portrait}" alt="" />
+            <img class="emb" src="${DATA.ranks[ch.rank]}" alt="" />
+          </div>
           <h2>${ch.name}</h2>
           <div class="meta">
             <div>${ch.gender || ""}</div>
