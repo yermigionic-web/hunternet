@@ -306,11 +306,12 @@
     .org-drop img {
       width: 100%; height: auto;
       filter:
-        drop-shadow(0 0 2px #fff)
-        drop-shadow(0 0 8px var(--org))
-        drop-shadow(0 0 18px var(--org))
-        drop-shadow(0 0 36px var(--org))
-        drop-shadow(0 0 58px color-mix(in srgb, var(--org) 85%, #fff));
+        drop-shadow(0 0 3px #fff)
+        drop-shadow(0 0 6px var(--org))
+        drop-shadow(0 0 16px var(--org))
+        drop-shadow(0 0 32px var(--org))
+        drop-shadow(0 0 56px var(--org))
+        drop-shadow(0 0 80px color-mix(in srgb, var(--org) 90%, #fff));
     }
     .shock {
       position: absolute; left: 50%; bottom: 14%;
@@ -712,18 +713,19 @@
     .pick-row { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; }
     .pick {
       flex: none; width: 64px; height: 52px; padding: 4px;
-      border-radius: 12px; border: 1px solid rgba(255,255,255,.55);
-      background: rgba(236, 244, 255, 0.94);
+      border-radius: 10px; border: 1px solid transparent;
+      background: transparent;
       display: grid; place-items: center;
-      box-shadow: 0 0 12px rgba(180, 210, 255, .35);
+      box-shadow: none;
     }
     .pick.on {
-      border-color: var(--orange);
-      box-shadow: 0 0 0 1px var(--orange), 0 0 16px rgba(255,122,61,.35);
+      border-color: rgba(255, 141, 82, .8);
+      background: rgba(255, 141, 82, .08);
+      box-shadow: none;
     }
     .pick img {
       max-width: 100%; max-height: 100%; object-fit: contain;
-      filter: drop-shadow(0 0 6px rgba(255,255,255,.4));
+      filter: none;
     }
     .fields { display: grid; grid-template-columns: 1.4fr .8fr .8fr; gap: 8px; }
     .fields label {
@@ -2364,6 +2366,8 @@
           ctx.restore();
         }
         const em = await loadImg(DATA.ranks[state.emblem]);
+        ctx.shadowColor = "transparent";
+        ctx.shadowBlur = 0;
         if (em) {
           const e = nc.emblem;
           const ex = e.x * W, ey = e.y * H, ew = e.w * W, eh = e.h * H;
