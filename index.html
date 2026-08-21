@@ -13,7 +13,7 @@
     HUNTERNET  ·  단일 파일 체험 페이지
     ------------------------------------------------------------
     이미지 가이드 (같은 폴더 / 상대경로, 추후 GitHub에 추가)
-      bgm.mp3                         배경음악 (id="bgm"). 없으면 high_beam.mp3 폴백
+      high_beam.mp3                   배경음악 (기본). 오디오 엘리먼트 id는 bgm
       main_site_logo.png              메인 로고
       ndra_logo.png / seohn_logo.png / taerim_logo.png
       hankyul_logo.png / hawon_logo.png / independent_logo.png
@@ -26,7 +26,7 @@
       assets/characters/{id}_portrait.png   증명/흉상
       assets/intro/{sceneId}_{n}.png        쇼트애니 컷 (소속 장면)
       assets/wiki/cover.png                 세계관 최상단 이미지
-    미리보기 해시: index.html#desk  ·  #lab  ·  #anim  ·  #spin
+    미리보기 해시: #desk  ·  #world  ·  #lab  ·  #anim  ·  #spin  ·  #char=haesol
     ============================================================
   -->
   <link rel="preconnect" href="https://cdn.jsdelivr.net" />
@@ -881,7 +881,7 @@
       "spinMs": 1700,
       "endHoldMs": 400
     },
-    "bgm": ["bgm.mp3", "bgm", "high_beam.mp3"],
+    "bgm": ["high_beam.mp3"],
     "introLines": ["", "", "", ""],
     "orgs": {
       "ndra": { "id": "ndra", "name": "국가재난대응청", "logo": "ndra_logo.png", "color": "#3b6bd4", "burn": "#f5c542" },
