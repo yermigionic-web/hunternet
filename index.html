@@ -490,8 +490,17 @@
     /* ===== assign quiz ===== */
     #paneAssign {
       padding: 8px 46px calc(28px + var(--safe-b)) 18px;
+      display: flex; flex-direction: column;
     }
-    #assignView { min-height: 100%; }
+    #assignView { flex: 1; width: 100%; min-height: 0; }
+    #assignView.is-home {
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: stretch;
+      text-align: center;
+    }
+    #assignView.is-home .as-kicker,
+    #assignView.is-home .as-title,
+    #assignView.is-home .as-lead { text-align: center; }
     .as-kicker {
       font-family: "Outfit", sans-serif; font-size: 10px; font-weight: 600;
       letter-spacing: .22em; text-transform: uppercase; color: var(--cyan);
@@ -1857,123 +1866,123 @@
     "assign": {
       "kicker": "ASSIGN",
       "title": "소속 배정",
-      "lead": "14문항. 각 3지선다. 점수가 가장 높은 조직으로 간다. 무소속도 목록에 있다.",
-      "start": "시작",
+      "lead": "14문항, 각 3지선다. 제일 점수 높은 조직으로 가. 무소속도 있어.",
+      "start": "해볼래",
       "retry": "다시 배정",
       "tally": "집계",
       "result": "배정 결과",
       "roster": "공개 인물",
       "questions": [
         {
-          "q": "아이돌이 된다면 어떨 것 같아?",
+          "q": "아이돌 되면 어때?",
           "a": [
-            { "t": "카메라 앞에서 하는 일이면 적성이다.", "org": "seohn" },
-            { "t": "방송보다 현장이 편하다. 안무는 사양한다.", "org": "taerim" },
-            { "t": "출연료와 초상권만 맞으면 된다.", "org": "hawon" }
+            { "t": "카메라 앞에서 하는 거, 나 잘 맞을 듯!", "org": "seohn" },
+            { "t": "방송보다 현장이 좋아. 안무는 사양할래.", "org": "taerim" },
+            { "t": "출연료랑 초상권만 맞으면 할래.", "org": "hawon" }
           ]
         },
         {
-          "q": "무언가를 위해 노력할 때의 스타일은?",
+          "q": "뭔가에 힘 줄 땐 어떤 게 좋아?",
           "a": [
-            { "t": "루틴을 만들고 기록으로 남긴다.", "org": "ndra" },
-            { "t": "필요한 구간만 몰아서 끝낸다.", "org": "independent" },
-            { "t": "티가 나는 성과에 힘을 쏟는다.", "org": "seohn" }
+            { "t": "루틴 만들고 기록 남기는 게 좋아.", "org": "ndra" },
+            { "t": "필요할 때만 몰아서 끝낼래.", "org": "independent" },
+            { "t": "티 나는 쪽에 힘주고 싶어!", "org": "seohn" }
           ]
         },
         {
-          "q": "하루의 계획은 어떻게 짜는 스타일?",
+          "q": "하루 계획은 어떻게 짤래?",
           "a": [
-            { "t": "시간표가 있어야 숨이 나온다.", "org": "ndra" },
-            { "t": "큰 줄만 잡고 현장에서 고친다.", "org": "taerim" },
-            { "t": "마감·청구·특약이 달력이다.", "org": "hankyul" }
+            { "t": "시간표 있어야 마음 편해.", "org": "ndra" },
+            { "t": "큰 줄만 잡고 가서 고치는 게 좋아.", "org": "taerim" },
+            { "t": "마감이랑 청구가 달력이야.", "org": "hankyul" }
           ]
         },
         {
-          "q": "갑자기 책임이 커지면?",
+          "q": "갑자기 책임 커지면 어떡할래?",
           "a": [
-            { "t": "사람부터 물린다. 산 사람이 우선이다.", "org": "taerim" },
-            { "t": "매뉴얼과 보고 라인부터 찾는다.", "org": "ndra" },
-            { "t": "조건부터 다시 쓴다. 구두로는 안 한다.", "org": "hankyul" }
+            { "t": "사람부터 물릴래. 산 사람이 먼저야.", "org": "taerim" },
+            { "t": "매뉴얼이랑 보고 라인부터 볼래.", "org": "ndra" },
+            { "t": "조건부터 다시 쓸래. 말로만은 안 해.", "org": "hankyul" }
           ]
         },
         {
-          "q": "여럿이 모인 자리에서는?",
+          "q": "사람 많은 자리면 어때?",
           "a": [
-            { "t": "말리는 쪽이 된다. 보이는 자리가 편하다.", "org": "seohn" },
-            { "t": "필요한 말만 하고 빠진다.", "org": "hawon" },
-            { "t": "출구부터 본다.", "org": "independent" }
+            { "t": "앞에 서는 쪽이 좋아!", "org": "seohn" },
+            { "t": "할 말만 하고 빠질래.", "org": "hawon" },
+            { "t": "출구부터 보고 싶어.", "org": "independent" }
           ]
         },
         {
-          "q": "자랑할 일이 생기면?",
+          "q": "자랑할 일 생기면 어떻게 할래?",
           "a": [
-            { "t": "공개하는 편이 맞다. 보이는 게 값이다.", "org": "seohn" },
-            { "t": "보고 라인에 먼저 올린다.", "org": "ndra" },
-            { "t": "단가에 반영되면 그때 말한다.", "org": "hawon" }
+            { "t": "그냥 공개할래. 보여야 값이지!", "org": "seohn" },
+            { "t": "위에 먼저 보고하고 싶어.", "org": "ndra" },
+            { "t": "돈에 반영되면 그때 말할래.", "org": "hawon" }
           ]
         },
         {
-          "q": "돈을 대하는 태도는?",
+          "q": "돈 얘기는 어떤 게 좋아?",
           "a": [
-            { "t": "증빙과 특약이 있어야 마음이 놓인다.", "org": "hankyul" },
-            { "t": "매달 들어오는 돈이 맞아야 한다.", "org": "ndra" },
-            { "t": "들어온 돈에서 세금을 먼저 뺀다.", "org": "independent" }
+            { "t": "증빙이랑 특약 있어야 마음이 놓여.", "org": "hankyul" },
+            { "t": "매달 들어오는 돈이 맞아야 좋아.", "org": "ndra" },
+            { "t": "들어오면 세금부터 빼고 싶어.", "org": "independent" }
           ]
         },
         {
-          "q": "일이 꼬이면 먼저 하는 것은?",
+          "q": "일 꼬이면 먼저 뭐 할래?",
           "a": [
-            { "t": "상태를 공유한다. 숨기는 쪽이 더 위험하다.", "org": "taerim" },
-            { "t": "합의 내용을 문서로 고정한다.", "org": "hankyul" },
-            { "t": "공개 채널을 닫고 입장을 정리한다.", "org": "seohn" }
+            { "t": "바로 공유할래. 숨기는 게 더 위험해.", "org": "taerim" },
+            { "t": "합의한 거 문서로 남기고 싶어.", "org": "hankyul" },
+            { "t": "일단 공개부터 닫고 입장 정리할래.", "org": "seohn" }
           ]
         },
         {
-          "q": "쉬는 날에 연락이 오면?",
+          "q": "쉬는 날에 연락 오면 어때?",
           "a": [
-            { "t": "내 차례면 나간다.", "org": "ndra" },
-            { "t": "받을 돈이 있으면 받는다.", "org": "independent" },
-            { "t": "조건이 세지면 나간다.", "org": "hawon" }
+            { "t": "내 차례면 나갈래.", "org": "ndra" },
+            { "t": "돈 되면 받을래.", "org": "independent" },
+            { "t": "조건 세지면 나가고 싶어.", "org": "hawon" }
           ]
         },
         {
-          "q": "도구를 고를 때?",
+          "q": "도구 고를 땐 뭐가 좋아?",
           "a": [
-            { "t": "익숙한 지급분이면 충분하다.", "org": "taerim" },
-            { "t": "싸도 된다. 정비만 되면.", "org": "independent" },
-            { "t": "돋보이는 쪽이 나중에 이득이다.", "org": "hawon" }
+            { "t": "익숙한 거면 충분해.", "org": "taerim" },
+            { "t": "싸도 돼. 정비만 되면 좋아.", "org": "independent" },
+            { "t": "돋보이는 쪽이 나중에 이득이지!", "org": "hawon" }
           ]
         },
         {
-          "q": "듣고 싶은 평은?",
+          "q": "어떤 평이 좋아?",
           "a": [
-            { "t": "안 죽는 쪽.", "org": "taerim" },
-            { "t": "잘 팔리는 쪽.", "org": "seohn" },
-            { "t": "정산이 깨끗한 쪽.", "org": "hankyul" }
+            { "t": "안 죽는 쪽이 좋아.", "org": "taerim" },
+            { "t": "잘 팔리는 쪽이 좋아!", "org": "seohn" },
+            { "t": "정산 깨끗한 쪽이 좋아.", "org": "hankyul" }
           ]
         },
         {
-          "q": "낯선 문제가 생기면?",
+          "q": "처음 보는 문제면 어떡할래?",
           "a": [
-            { "t": "남는 게 적어도, 맡는 일이면 맡는다.", "org": "ndra" },
-            { "t": "이득과 위험을 저울질한다.", "org": "hawon" },
-            { "t": "작은 일부터 건별로 받는다. 모르는 파티는 안 탄다.", "org": "independent" }
+            { "t": "남는 게 없어도 내 일이면 맡을래.", "org": "ndra" },
+            { "t": "이득이랑 위험 저울질하고 싶어.", "org": "hawon" },
+            { "t": "작은 일부터 건별로 받을래. 모르는 파티는 안 타.", "org": "independent" }
           ]
         },
         {
-          "q": "같이 일할 사람 기준은?",
+          "q": "같이 일할 사람은 어떤 게 좋아?",
           "a": [
-            { "t": "말보다 습관이 맞는 사람.", "org": "taerim" },
-            { "t": "내 구간을 건드리지 않는 사람.", "org": "hawon" },
-            { "t": "역할이 적혀 있는 사람.", "org": "hankyul" }
+            { "t": "말보다 습관 맞는 사람이 좋아.", "org": "taerim" },
+            { "t": "내 구간 안 건드리는 사람이 좋아.", "org": "hawon" },
+            { "t": "역할이 적혀 있는 사람이 좋아.", "org": "hankyul" }
           ]
         },
         {
-          "q": "몇 년 뒤의 나는?",
+          "q": "몇 년 뒤엔 어떤 게 좋아?",
           "a": [
-            { "t": "얼굴이거나, 숫자를 쥐고 있다.", "org": "seohn" },
-            { "t": "사고와 비용을 먼저 읽는 사람이다.", "org": "hankyul" },
-            { "t": "소속 없이 면허와 거래처만 남아 있다.", "org": "independent" }
+            { "t": "얼굴이거나, 숫자 쥐고 있고 싶어!", "org": "seohn" },
+            { "t": "사고랑 비용부터 읽는 쪽이 좋아.", "org": "hankyul" },
+            { "t": "소속 없이 면허랑 거래처만 남을래.", "org": "independent" }
           ]
         }
       ]
@@ -2477,6 +2486,7 @@
           qz.winner = pickWinner(qz.scores, qz.picks);
           qz.phase = "tally";
         }
+        box.classList.toggle("is-home", qz.phase === "start");
 
         if (qz.phase === "start") {
           box.innerHTML = `
