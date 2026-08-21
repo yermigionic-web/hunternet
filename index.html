@@ -26,7 +26,7 @@
       {id}_portrait.png                   증명사진 (루트)
       선우나경만 파일명이 nagyung_standing.png / nagyung_portrait.png
       {sceneId}_{n}.png                     쇼트애니 컷 (루트: ndra_1.png, seohn_1~3 …)
-      assets/wiki/cover.png                 세계관 최상단 이미지
+      wiki.png                            세계관 최상단 이미지
     미리보기 해시: #desk  ·  #world  ·  #lab  ·  #anim  ·  #scene=0  ·  #spin  ·  #char=haesol
     ============================================================
   -->
@@ -548,16 +548,17 @@
       background: rgba(255,255,255,.035); overflow: hidden;
     }
     .wiki-hero {
-      position: relative; aspect-ratio: 16/9;
+      position: relative; aspect-ratio: 1216 / 832;
       background: #0c1628; overflow: hidden;
     }
-    .wiki-hero img, .wiki-hero svg { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .wiki-hero img, .wiki-hero svg { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
     .wiki-hero .cap {
       position: absolute; left: 0; right: 0; bottom: 0;
       padding: 8px 12px; font-size: 11px;
       background: linear-gradient(transparent, rgba(0,0,0,.65));
       min-height: 1.6em; color: var(--fg-2);
     }
+    .wiki-hero .cap:empty { display: none; }
     .wiki-box { padding: 14px 14px 8px; }
     .wiki-title {
       font-size: 22px; font-weight: 800; min-height: 1.2em;
@@ -1131,7 +1132,7 @@
     ],
     "wiki": {
       "title": "",
-      "hero": "assets/wiki/cover.png",
+      "hero": "wiki.png",
       "heroCaption": "",
       "infoboxTitle": "",
       "infobox": [
@@ -1435,14 +1436,20 @@
             </div>
           </div>`;
         const img = new Image();
-        img.src = w.hero;
-        img.onload = () => {
-          const h = $("#wikiHero");
-          if (!h) return;
-          h.insertBefore(img, h.firstChild);
-          const svg = h.querySelector("svg");
-          if (svg) svg.remove();
+        const paths = [w.hero, "wiki.png", "assets/wiki/cover.png"].filter((p, i, a) => p && a.indexOf(p) === i);
+        const tryLoad = (i) => {
+          if (i >= paths.length) return;
+          img.onload = () => {
+            const h = $("#wikiHero");
+            if (!h) return;
+            h.insertBefore(img, h.firstChild);
+            const svg = h.querySelector("svg");
+            if (svg) svg.remove();
+          };
+          img.onerror = () => tryLoad(i + 1);
+          img.src = paths[i];
         };
+        tryLoad(0);
       }
 
       function openDetail(id) {
