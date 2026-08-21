@@ -727,7 +727,7 @@
       max-width: 100%; max-height: 100%; object-fit: contain;
       filter: none;
     }
-    .fields { display: grid; grid-template-columns: 1.4fr .8fr .8fr; gap: 8px; }
+    .fields { display: grid; grid-template-columns: 1.3fr 1fr; gap: 8px; }
     .fields label {
       display: flex; flex-direction: column; gap: 4px;
       font-size: 10px; color: var(--fg-3);
@@ -923,6 +923,7 @@
             <div class="lbl" id="lblFields"></div>
             <div class="fields">
               <label><span id="lblName"></span><input id="inName" autocomplete="off" /></label>
+              <label><span id="lblAbility"></span><input id="inAbility" autocomplete="off" /></label>
               <label><span id="lblAge"></span><input id="inAge" inputmode="numeric" /></label>
               <label><span id="lblH"></span><input id="inH" inputmode="decimal" /></label>
             </div>
@@ -971,6 +972,7 @@
       "lblOrg": "",
       "lblFields": "",
       "lblName": "이름",
+      "lblAbility": "능력",
       "lblAge": "나이",
       "lblH": "키",
       "save": "저장"
@@ -1687,8 +1689,8 @@
       "height": 801,
       "h": {
         "x": 0.195,
-        "y": 0.36,
-        "size": 34
+        "y": 0.318,
+        "size": 28
       },
       "ink": "#2a3b58",
       "photo": {
@@ -1714,10 +1716,14 @@
         "y": 0.248,
         "size": 70
       },
+      "ability": {
+        "size": 22,
+        "dy": 0.016
+      },
       "age": {
         "x": 0.195,
-        "y": 0.312,
-        "size": 34
+        "y": 0.318,
+        "size": 28
       }
     }
   }
@@ -1994,6 +2000,7 @@
         $("#lblOrg").textContent = u.lblOrg || "";
         $("#lblFields").textContent = u.lblFields || "";
         $("#lblName").textContent = u.lblName || "";
+        $("#lblAbility").textContent = u.lblAbility || "";
         $("#lblAge").textContent = u.lblAge || "";
         $("#lblH").textContent = u.lblH || "";
         $("#btnSave").textContent = u.save || "";
@@ -2330,6 +2337,75 @@
         ctx.drawImage(img, sx, sy, sw, sh, x, y, w, h);
       }
 
+      function fillRoundRect(ctx, x, y, w, h, r) {
+        const rad = Math.max(0, Math.min(r, w / 2, h / 2));
+        ctx.beginPath();
+        if (typeof ctx.roundRect === "function") ctx.roundRect(x, y, w, h, rad);
+        else ctx.rect(x, y, w, h);
+        ctx.fill();
+      }
+
+      function formatCardAge(raw) {
+        const t = String(raw || "").trim();
+        if (!t) return "";
+        if (/세$/.test(t)) return t;
+        if (/^\d+$/.test(t)) return t + "세";
+        return t;
+      }
+
+      function formatCardHeight(raw) {
+        const t = String(raw || "").trim();
+        if (!t) return "";
+        if (/cm$/i.test(t)) return t;
+        if (/^\d+(\.\d+)?$/.test(t)) return t + "cm";
+        return t;
+      }
+
+      function formatCardAbility(raw) {
+        const t = String(raw || "").trim();
+        if (!t || /\s/.test(t)) return t;
+        const chars = [...t];
+        if (chars.length >= 2 && chars.length <= 3) return chars.join(" ");
+        return t;
+      }
+
+      function drawNameWash(ctx, x, y, nameW, size, maxW) {
+        if (!nameW) return;
+        const washW = Math.min(nameW + size * 4.6, maxW);
+        const washH = size * 1.05;
+        const washX = x - size * 0.08;
+        const washY = y - size * 0.82;
+        ctx.save();
+        ctx.filter = "blur(10px)";
+        const g = ctx.createLinearGradient(washX, 0, washX + washW, 0);
+        g.addColorStop(0, "rgba(150, 205, 235, 0)");
+        g.addColorStop(0.1, "rgba(155, 210, 240, 0.5)");
+        g.addColorStop(0.42, "rgba(175, 220, 242, 0.28)");
+        g.addColorStop(1, "rgba(200, 230, 248, 0)");
+        ctx.fillStyle = g;
+        ctx.fillRect(washX, washY, washW, washH);
+        ctx.restore();
+      }
+
+      function drawMetaPill(ctx, text, x, y, fontSize, ink) {
+        if (!text) return 0;
+        ctx.font = `500 ${fontSize}px NexonWarhaven, Pretendard, sans-serif`;
+        const padX = Math.max(12, fontSize * 0.48);
+        const padY = Math.max(6, fontSize * 0.28);
+        const tw = ctx.measureText(text).width;
+        const boxW = tw + padX * 2;
+        const boxH = fontSize + padY * 2;
+        const boxY = y - fontSize * 0.78;
+        ctx.fillStyle = "rgba(168, 174, 182, 0.58)";
+        fillRoundRect(ctx, x, boxY, boxW, boxH, 8);
+        ctx.fillStyle = ink;
+        ctx.textAlign = "left";
+        ctx.textBaseline = "middle";
+        ctx.fillText(text, x + padX, boxY + boxH / 2);
+        ctx.textBaseline = "alphabetic";
+        return boxW;
+      }
+
       const assets = {};
       function loadImg(src) {
         if (assets[src]) return assets[src];
@@ -2368,11 +2444,9 @@
         const em = await loadImg(DATA.ranks[state.emblem]);
         ctx.shadowColor = "transparent";
         ctx.shadowBlur = 0;
-        if (em) {
-          const e = nc.emblem;
-          const ex = e.x * W, ey = e.y * H, ew = e.w * W, eh = e.h * H;
-          ctx.drawImage(em, ex, ey, ew, eh);
-        }
+        const e = nc.emblem;
+        const ex = e.x * W, ey = e.y * H, ew = e.w * W, eh = e.h * H;
+        if (em) ctx.drawImage(em, ex, ey, ew, eh);
         const lg = await loadImg(orgOf(state.org).logo);
         if (lg) {
           const l = nc.logo;
@@ -2384,18 +2458,46 @@
           ctx.drawImage(lg, lx, ly, dw, dh);
         }
         await document.fonts.ready;
-        ctx.fillStyle = nc.ink || "#2a3b58";
+        const ink = nc.ink || "#2a3b58";
         ctx.shadowColor = "transparent";
         ctx.shadowBlur = 0;
+        ctx.filter = "none";
         ctx.textAlign = "left";
         ctx.textBaseline = "alphabetic";
+
+        const nameText = $("#inName").value || "";
+        const nameX = nc.name.x * W;
+        const nameY = nc.name.y * H;
         ctx.font = `700 ${nc.name.size}px NexonWarhaven, Pretendard, sans-serif`;
-        ctx.fillText($("#inName").value || "", nc.name.x * W, nc.name.y * H);
-        ctx.font = `400 ${(nc.age && nc.age.size) || 28}px NexonWarhaven, Pretendard, sans-serif`;
-        ctx.fillText($("#inAge").value || "", nc.age.x * W, nc.age.y * H);
-        const hp = nc.h || {};
-        ctx.font = `400 ${hp.size || 28}px NexonWarhaven, Pretendard, sans-serif`;
-        ctx.fillText($("#inH").value || "", (hp.x || 0.175) * W, (hp.y || 0.36) * H);
+        const nameW = ctx.measureText(nameText).width;
+        drawNameWash(ctx, nameX, nameY, nameW, nc.name.size, W * 0.4);
+        ctx.fillStyle = ink;
+        ctx.fillText(nameText, nameX, nameY);
+
+        const abilityText = formatCardAbility($("#inAbility").value);
+        if (abilityText) {
+          const aSize = (nc.ability && nc.ability.size) || 22;
+          const aDy = ((nc.ability && nc.ability.dy) || 0.016) * H;
+          ctx.font = `500 ${aSize}px NexonWarhaven, Pretendard, sans-serif`;
+          ctx.textAlign = "center";
+          ctx.textBaseline = "top";
+          try { ctx.letterSpacing = "0.14em"; } catch (err) {}
+          ctx.fillStyle = ink;
+          ctx.fillText(abilityText, ex + ew / 2, ey + eh + aDy);
+          try { ctx.letterSpacing = "0px"; } catch (err) {}
+          ctx.textAlign = "left";
+          ctx.textBaseline = "alphabetic";
+        }
+
+        const ageText = formatCardAge($("#inAge").value);
+        const hText = formatCardHeight($("#inH").value);
+        const pillSize = (nc.age && nc.age.size) || (nc.h && nc.h.size) || 28;
+        const pillY = (nc.age && nc.age.y != null ? nc.age.y : 0.318) * H;
+        let pillX = (nc.age && nc.age.x != null ? nc.age.x : 0.195) * W;
+        const gap = 10;
+        const ageW = drawMetaPill(ctx, ageText, pillX, pillY, pillSize, ink);
+        if (ageW && hText) pillX += ageW + gap;
+        drawMetaPill(ctx, hText, pillX, pillY, pillSize, ink);
       }
 
       function labPicks() {
@@ -2458,7 +2560,7 @@
           };
           im.src = URL.createObjectURL(f);
         };
-        ["inName", "inAge", "inH"].forEach((id) => $(`#${id}`).addEventListener("input", paintCard));
+        ["inName", "inAbility", "inAge", "inH"].forEach((id) => $(`#${id}`).addEventListener("input", paintCard));
         $("#btnSave").onclick = async () => {
           await paintCard();
           const a = document.createElement("a");
