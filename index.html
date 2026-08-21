@@ -2157,18 +2157,18 @@
           const ch = byId(id);
           const unit = document.createElement("div");
           unit.className = "unit";
+          const still = (sc.stills && sc.stills[n]) || `${sc.id}_${n + 1}.png`;
           const paths = [
-            (sc.stills && sc.stills[n]) || "",
-            `${sc.id}_${n + 1}.png`,
-            `assets/intro/${sc.id}_${n + 1}.png`,
+            still,
+            `assets/intro/${String(still).split("/").pop()}`,
+            ch && (ch.id === "nagyeong" ? "nagyung_standing.png" : `${ch.id}_standing.png`),
             ch && ch.standing
-          ].filter(Boolean);
-          const ready = paths.find(primedReady);
-          if (ready) {
+          ].filter((p, i, a) => p && a.indexOf(p) === i);
+          if (primedReady(paths[0])) {
             const extra = new Image();
             extra.className = "art";
             extra.alt = "";
-            extra.src = ready;
+            extra.src = paths[0];
             unit.appendChild(extra);
           } else {
             unit.appendChild(standingNode(ch));
