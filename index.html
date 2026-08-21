@@ -103,7 +103,7 @@
     }
     #phone {
       position: relative;
-      width: min(100%, 430px);
+      width: min(100%, 516px);
       height: min(100dvh - 36px, 932px);
       border-radius: var(--phone-r);
       overflow: hidden;
@@ -114,7 +114,7 @@
         0 0 0 11px rgba(255,255,255,.12),
         0 40px 80px rgba(0,0,0,.55);
     }
-    @media (max-width: 540px) {
+    @media (max-width: 900px) {
       #stage { padding: 0; }
       #phone {
         width: 100%;
@@ -247,9 +247,14 @@
       font-family: "Pretendard Variable", Pretendard, sans-serif;
       font-weight: 700; font-size: clamp(18px, 5.2vw, 26px);
       letter-spacing: .04em; text-align: center;
-      min-height: 1.4em; max-width: 16em;
+      min-height: 1.4em; max-width: 22em;
       opacity: 0; transform: translateY(8px);
-      text-shadow: 0 0 24px rgba(96,165,250,.35);
+      background: linear-gradient(90deg, var(--orange) 0%, var(--blue-2) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 0 16px rgba(255, 141, 82, .28));
     }
     .glitch-line.on { animation: lineIn 0.45s var(--ease) forwards; }
     .glitch-line.out { animation: lineGlitchOut 0.7s steps(4) forwards; }
@@ -1162,7 +1167,7 @@
         "org": "hawon",
         "newsTitle": "해스티 황보소라, 오늘만 세 번째 성씨 정정… “팀플이 그거면 싫다”",
         "summary": "해스티원더러즈 계약 헌터. A급. 통칭 해원. 능력은 〈단절〉로, 지정 대상을 물리·마력 간섭에서 잘라 낸다. 공식 자료에도 아군 힐·버프·통신이 같이 끊긴다고 적혀 있다. 개인 전투 점수는 높고 본사 협업 평가는 낮다는 말이 업계에 돈다. 재계약은 이어진다.\n\n인터뷰에선 미팅보다 좌표만 달라는 취지로 답한 적이 있다. 성은 황보다. 보도에서 자주 틀린다.",
-        "speech": "짧고 건조하고 약간 빈정댄다. 황보가 성이다.",
+        "speech": "짧고 건조하고 약간 빈정댄다. 설명보다 좌표가 먼저 나온다.",
         "portrait": "sora_portrait.png",
         "hair": "#2a2a28",
         "eye": "#3d6b3a",
@@ -1265,7 +1270,7 @@
         "org": "hankyul",
         "newsTitle": "한결손보 차여름 과장, 레이드 중 보험료 산출… “그걸 왜 구두로 합의했어요”",
         "summary": "한결손해보험 본부 특수재해보상팀 과장. 현장 손해조사 겸업 헌터. C급. 능력은 〈고정〉. 본업은 보험사라고 본인이 먼저 말한다. 게이트 사고 현장조사, 과실비율, 헌터 부상, 장비 손해가 업무다.\n\n레이드 중에도 보험 조항을 묻는 클립이 남는다. 구두 합의는 분쟁 소지라는 설명을 반복한다. 전업 헌터 제안은 거절했다는 보도가 있다.",
-        "speech": "자연스러운 직장인 존대. 화날수록 단어가 정확해진다.",
+        "speech": "자연스러운 직장인 존대. 조항을 물을 때 단어가 정확해진다.",
         "portrait": "yeoreum_portrait.png",
         "hair": "#4b4f55",
         "eye": "#6d7278",
@@ -1671,7 +1676,8 @@
     "namecard": {
       "base": "khw_namecard_base.png",
       "width": 1562,
-      "height": {
+      "height": 801,
+      "h": {
         "x": 0.175,
         "y": 0.36,
         "size": 28
@@ -1722,6 +1728,46 @@
       const lineMs = T.introLineMs > 0 ? T.introLineMs : T.introTextMs / Math.max(1, DATA.introLines.length);
       const sceneStart = T.introTextMs;
       const animEnd = sceneStart + DATA.scenes.length * T.sceneMs + T.endHoldMs;
+
+      const primed = new Map();
+      function primeImg(src) {
+        if (!src || primed.has(src)) return primed.get(src);
+        const im = new Image();
+        im.decoding = "async";
+        im.src = src;
+        if (im.decode) im.decode().catch(() => {});
+        primed.set(src, im);
+        return im;
+      }
+      function primedReady(src) {
+        const im = primed.get(src);
+        return !!(im && im.complete && im.naturalWidth);
+      }
+      function animUrls() {
+        const urls = [];
+        const add = (u) => { if (u && urls.indexOf(u) < 0) urls.push(u); };
+        DATA.scenes.forEach((sc) => {
+          (sc.stills || []).forEach(add);
+          add(`${sc.id}_1.png`);
+          add(`${sc.id}_2.png`);
+          add(`${sc.id}_3.png`);
+          const o = orgOf(sc.org);
+          if (o) add(o.logo);
+          (sc.members || []).forEach((id) => {
+            const ch = byId(id);
+            if (!ch) return;
+            add(ch.standing);
+            add(ch.id === "nagyeong" ? "nagyung_standing.png" : `${ch.id}_standing.png`);
+          });
+        });
+        add("main_site_logo.png");
+        add((DATA.namecard && DATA.namecard.base) || "khw_namecard_base.png");
+        return urls;
+      }
+      function preloadAnim() {
+        animUrls().forEach(primeImg);
+      }
+      preloadAnim();
 
       const bgm = new Audio();
       bgm.preload = "auto";
@@ -2103,24 +2149,36 @@
           const ch = byId(id);
           const unit = document.createElement("div");
           unit.className = "unit";
-          const holder = standingNode(ch);
-          unit.appendChild(holder);
           const paths = [
             (sc.stills && sc.stills[n]) || "",
             `${sc.id}_${n + 1}.png`,
             `assets/intro/${sc.id}_${n + 1}.png`,
             ch && ch.standing
           ].filter(Boolean);
-          const tryLoad = (i) => {
-            if (i >= paths.length) return;
+          const ready = paths.find(primedReady);
+          if (ready) {
             const extra = new Image();
             extra.className = "art";
             extra.alt = "";
-            extra.onload = () => { unit.innerHTML = ""; unit.appendChild(extra); };
-            extra.onerror = () => tryLoad(i + 1);
-            extra.src = paths[i];
-          };
-          tryLoad(0);
+            extra.src = ready;
+            unit.appendChild(extra);
+          } else {
+            unit.appendChild(standingNode(ch));
+            const tryLoad = (i) => {
+              if (i >= paths.length) return;
+              const extra = new Image();
+              extra.className = "art";
+              extra.alt = "";
+              extra.onload = () => { unit.innerHTML = ""; unit.appendChild(extra); };
+              extra.onerror = () => tryLoad(i + 1);
+              extra.src = paths[i];
+              if (extra.complete) {
+                if (extra.naturalWidth) extra.onload();
+                else tryLoad(i + 1);
+              }
+            };
+            tryLoad(0);
+          }
           cast.appendChild(unit);
         });
         const drop = $("#orgDrop");
@@ -2241,6 +2299,7 @@
 
       function start() {
         if (state.screen !== "boot") return;
+        preloadAnim();
         bgm.muted = state.muted;
         state.t0 = performance.now();
         bgm.play().catch(() => {});
@@ -2303,15 +2362,19 @@
 
       async function paintCard() {
         const nc = DATA.namecard;
+        const W = nc.width;
+        const H = typeof nc.height === "number" ? nc.height : 801;
         const cv = $("#cardCanvas");
+        if (cv.width !== W) cv.width = W;
+        if (cv.height !== H) cv.height = H;
         const ctx = cv.getContext("2d");
-        ctx.clearRect(0, 0, nc.width, nc.height);
+        ctx.clearRect(0, 0, W, H);
         ctx.fillStyle = "#6d7178";
-        ctx.fillRect(0, 0, nc.width, nc.height);
+        ctx.fillRect(0, 0, W, H);
         const base = await loadImg(nc.base);
-        if (base) ctx.drawImage(base, 0, 0, nc.width, nc.height);
+        if (base) ctx.drawImage(base, 0, 0, W, H);
         const p = nc.photo;
-        const px = p.x * nc.width, py = p.y * nc.height, pw = p.w * nc.width, ph = p.h * nc.height;
+        const px = p.x * W, py = p.y * H, pw = p.w * W, ph = p.h * H;
         if (state.photo) {
           ctx.save();
           ctx.beginPath();
@@ -2323,18 +2386,18 @@
         const em = await loadImg(DATA.ranks[state.emblem]);
         if (em) {
           const e = nc.emblem;
-          const ex = e.x * nc.width, ey = e.y * nc.height, ew = e.w * nc.width, eh = e.h * nc.height;
+          const ex = e.x * W, ey = e.y * H, ew = e.w * W, eh = e.h * H;
           drawPlate(ctx, ex, ey, ew, eh);
           ctx.drawImage(em, ex, ey, ew, eh);
         }
         const lg = await loadImg(orgOf(state.org).logo);
         if (lg) {
           const l = nc.logo;
-          const boxW = l.w * nc.width, boxH = l.h * nc.height;
+          const boxW = l.w * W, boxH = l.h * H;
           const r = lg.width / lg.height;
           let dw = boxW, dh = dw / r;
           if (dh > boxH) { dh = boxH; dw = dh * r; }
-          const lx = l.x * nc.width, ly = l.y * nc.height + (boxH - dh) / 2;
+          const lx = l.x * W, ly = l.y * H + (boxH - dh) / 2;
           drawPlate(ctx, lx, ly, dw, dh);
           ctx.drawImage(lg, lx, ly, dw, dh);
         }
@@ -2345,11 +2408,12 @@
         ctx.textAlign = "left";
         ctx.textBaseline = "alphabetic";
         ctx.font = `700 ${nc.name.size}px NexonWarhaven, Pretendard, sans-serif`;
-        ctx.fillText($("#inName").value || "", nc.name.x * nc.width, nc.name.y * nc.height);
+        ctx.fillText($("#inName").value || "", nc.name.x * W, nc.name.y * H);
         ctx.font = `400 ${(nc.age && nc.age.size) || 28}px NexonWarhaven, Pretendard, sans-serif`;
-        ctx.fillText($("#inAge").value || "", nc.age.x * nc.width, nc.age.y * nc.height);
-        ctx.font = `400 ${(nc.height && nc.height.size) || 28}px NexonWarhaven, Pretendard, sans-serif`;
-        ctx.fillText($("#inH").value || "", nc.height.x * nc.width, nc.height.y * nc.height);
+        ctx.fillText($("#inAge").value || "", nc.age.x * W, nc.age.y * H);
+        const hp = nc.h || {};
+        ctx.font = `400 ${hp.size || 28}px NexonWarhaven, Pretendard, sans-serif`;
+        ctx.fillText($("#inH").value || "", (hp.x || 0.175) * W, (hp.y || 0.36) * H);
       }
 
       function labPicks() {
