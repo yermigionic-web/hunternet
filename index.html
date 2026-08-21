@@ -26,7 +26,7 @@
       assets/characters/{id}_portrait.png   증명/흉상
       assets/intro/{sceneId}_{n}.png        쇼트애니 컷 (소속 장면)
       assets/wiki/cover.png                 세계관 최상단 이미지
-    텍스트/박자는 아래 JSON(#KHW_DATA)만 고치면 됩니다.
+    미리보기 해시: index.html#desk  ·  #lab  ·  #anim  ·  #spin
     ============================================================
   -->
   <link rel="preconnect" href="https://cdn.jsdelivr.net" />
@@ -647,9 +647,10 @@
       position: absolute; right: 14px; bottom: calc(14px + var(--safe-b));
       z-index: 30; width: 36px; height: 36px; border-radius: 50%;
       background: var(--glass-2); border: 1px solid var(--line);
-      backdrop-filter: blur(10px); display: grid; place-items: center;
-      font-size: 14px;
+      backdrop-filter: blur(10px); place-items: center;
+      font-size: 14px; display: none;
     }
+    .mute:not([hidden]) { display: grid; }
 
     @keyframes grain { 50% { transform: translate3d(-2%, 1%, 0); } }
     @keyframes slice {
@@ -1253,6 +1254,11 @@
           </defs>
           <ellipse cx="100" cy="500" rx="48" ry="10" fill="#000" opacity=".28"/>
           <g transform="translate(100 470) scale(${s}) translate(-100 -470)">
+            ${long ? `<path d="M58 160 C50 230 56 300 62 360 C70 300 74 250 78 200" fill="${hair}"/>
+              <path d="M142 160 C150 230 144 300 138 360 C130 300 126 250 122 200" fill="${hair}"/>
+              <path d="M70 200 C66 270 72 330 78 370" fill="none" stroke="${tip}" stroke-width="9" opacity=".5"/>` :
+            pony ? `<path d="M118 118 C152 128 160 188 148 228 C136 208 128 158 118 130Z" fill="${hair}"/>` :
+            wolf ? `<path d="M70 120 L62 92 L78 108 L100 78 L122 108 L138 90 L130 122" fill="${hair}"/>` : ""}
             <rect x="70" y="210" width="60" height="170" rx="18" fill="url(#c${ch.id})"/>
             <path d="M78 220 C70 300 62 360 70 470 L90 470 C88 360 90 300 92 228Z" fill="#1a2438"/>
             <path d="M122 220 C130 300 138 360 130 470 L110 470 C112 360 110 300 108 228Z" fill="#1a2438"/>
@@ -1262,6 +1268,12 @@
             <rect x="88" y="248" width="24" height="14" rx="3" fill="${orgOf(ch.org).color}" opacity=".8"/>
             <circle cx="100" cy="148" r="38" fill="${skin}"/>
             <path d="M78 154 Q100 168 122 154" fill="none" stroke="${skin}" stroke-width="10" stroke-linecap="round"/>
+            ${long ? `<path d="M62 148 C58 112 78 92 100 90 C122 92 142 112 138 148 C130 118 116 108 100 108 C84 108 70 118 62 148Z" fill="${hair}"/>` :
+            pony ? `<path d="M64 150 C60 118 78 96 100 94 C122 96 140 118 136 150 C132 128 120 114 100 114 C80 114 68 128 64 150Z" fill="${hair}"/>` :
+            wolf ? `<path d="M62 148 C60 112 78 94 100 92 C124 94 140 114 138 148 C130 126 116 118 100 118 C84 118 70 126 62 148Z" fill="${hair}"/>` :
+            bob ? `<path d="M62 150 C58 112 76 96 100 94 C124 96 142 112 138 150 C136 168 128 176 118 176 L82 176 C72 176 64 168 62 150Z" fill="${hair}"/>
+              <path d="M120 170 C130 198 128 218 118 226" fill="none" stroke="${tip}" stroke-width="8"/>` :
+            `<path d="M64 148 C60 112 76 96 100 94 C124 96 140 112 136 148 C130 128 116 118 100 118 C84 118 70 128 64 148Z" fill="${hair}"/>`}
             ${scar ? `<path d="M92 138 L118 150" stroke="#7a3a3a" stroke-width="2" opacity=".7"/>` : ""}
             <ellipse cx="86" cy="148" rx="4.2" ry="4.6" fill="${eye}"/>
             <ellipse cx="114" cy="148" rx="4.2" ry="4.6" fill="${eye}"/>
@@ -1272,14 +1284,6 @@
               <rect x="102" y="140" width="24" height="16" rx="4"/>
               <path d="M98 148h4"/>
             </g>` : ""}
-            ${long ? `<path d="M62 150 C58 210 64 280 70 340 C90 300 110 300 130 340 C136 280 142 210 138 150 C148 120 140 96 100 92 C60 96 52 120 62 150Z" fill="${hair}"/>
-              <path d="M70 200 C66 260 74 320 78 360" fill="none" stroke="${tip}" stroke-width="10" opacity=".55"/>` :
-            pony ? `<path d="M64 150 C60 118 78 96 100 94 C122 96 140 118 136 150 C132 128 120 114 100 114 C80 114 68 128 64 150Z" fill="${hair}"/>
-              <path d="M118 120 C150 130 158 190 148 230 C136 210 128 160 118 132Z" fill="${hair}"/>` :
-            wolf ? `<path d="M60 148 C58 110 78 90 100 90 C128 90 146 112 140 150 C148 128 138 100 118 96 L100 78 L82 98 C70 102 62 122 60 148Z" fill="${hair}"/>` :
-            bob ? `<path d="M62 150 C58 112 76 96 100 94 C124 96 142 112 138 150 C136 176 128 188 118 190 L82 190 C72 188 64 176 62 150Z" fill="${hair}"/>
-              <path d="M120 170 C130 200 128 220 118 228" fill="none" stroke="${tip}" stroke-width="8"/>` :
-            `<path d="M64 148 C60 112 76 96 100 94 C124 96 140 112 136 148 C130 128 116 118 100 118 C84 118 70 128 64 148Z" fill="${hair}"/>`}
             <path d="M88 163 Q100 170 112 163" fill="none" stroke="#c07870" stroke-width="1.6" opacity=".7"/>
           </g>
           <!-- ASSET: ${ch.standing}  스탠딩 PNG가 있으면 이 SVG 대신 표시됩니다. -->
@@ -1723,6 +1727,19 @@
           bgm.muted = state.muted;
           $("#mute").textContent = state.muted ? "×" : "♪";
         };
+
+        const hash = (location.hash || "").replace("#", "");
+        if (hash === "desk" || hash === "lab" || hash === "anim" || hash === "spin" || hash === "world") {
+          show(hash === "world" ? "desk" : hash);
+          if (hash === "world") setTab("world");
+          if (hash === "anim") {
+            state.t0 = performance.now() - T.bgmLeadMs;
+            state.raf = requestAnimationFrame(tick);
+          }
+        } else if (hash.indexOf("char=") === 0) {
+          show("desk");
+          openDetail(hash.slice(5));
+        }
       }
 
       boot();
